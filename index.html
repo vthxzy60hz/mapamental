@@ -1,22 +1,387 @@
 <!DOCTYPE html>
-<html lang=pt-BR>
-  <html>
-  <head>
-    <meta=>
-    <meta=>
-      <title>Mapa Mental: Estado, Nação, Povo e Comunidade</title>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Mental: Estado, Nação, Povo e Comunidade</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      title{ 
-        pixel: 32px
-        color: purple
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a14;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #8a2be2;
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+        }
+        
+        .description {
+            color: #a0a0c0;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
+        .mind-map-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            padding: 20px;
+        }
+        
+        .central-topic {
+            background: linear-gradient(135deg, #4b0082 0%, #8a2be2 100%);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.8rem;
+            box-shadow: 0 0 15px #8a2be2;
+            text-align: center;
+            margin: 0 auto 60px;
+            width: fit-content;
+            position: relative;
+            z-index: 10;
+            border: 2px solid #9370db;
+        }
+        
+        .branches-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+        }
+        
+        .branch {
+            width: 45%;
+            min-width: 400px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+        
+        .main-topic {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid;
+        }
+        
+        .main-topic h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subtopics {
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .subtopic {
+            background-color: rgba(20, 20, 35, 0.8);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border-left: 3px solid;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+        
+        .subtopic:hover {
+            transform: translateX(5px);
+        }
+        
+        .subtopic p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        
+        /* Cores para cada ramo */
+        .branch-estado .main-topic {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-color: #4cc9f0;
+        }
+        
+        .branch-estado .main-topic h3 {
+            color: #4cc9f0;
+        }
+        
+        .branch-estado .subtopic {
+            border-color: #4cc9f0;
+        }
+        
+        .branch-nacao .main-topic {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-color: #f72585;
+        }
+        
+        .branch-nacao .main-topic h3 {
+            color: #f72585;
+        }
+        
+        .branch-nacao .subtopic {
+            border-color: #f72585;
+        }
+        
+        .branch-povo .main-topic {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-color: #f9c74f;
+        }
+        
+        .branch-povo .main-topic h3 {
+            color: #f9c74f;
+        }
+        
+        .branch-povo .subtopic {
+            border-color: #f9c74f;
+        }
+        
+        .branch-comunidade .main-topic {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-color: #7209b7;
+        }
+        
+        .branch-comunidade .main-topic h3 {
+            color: #7209b7;
+        }
+        
+        .branch-comunidade .subtopic {
+            border-color: #7209b7;
+        }
+        
+        .connectors {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .connector {
+            position: absolute;
+            background: linear-gradient(to right, #8a2be2, #4cc9f0, #f72585, #f9c74f, #7209b7);
+            height: 3px;
+            transform-origin: 0 0;
+            z-index: 1;
+        }
+        
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #a0a0c0;
+            font-size: 0.9rem;
+            padding: 20px;
+            border-top: 1px solid #222240;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        @media (max-width: 900px) {
+            .branches-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .branch {
+                width: 100%;
+                min-width: unset;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .central-topic {
+                padding: 20px 30px;
+                font-size: 1.5rem;
+            }
+        }
     </style>
-    <h1>Estado</h1>
-    <p>Estado é a unidade política e jurídica fundamental.</p>
-    <h2>Nação</h2>
-    <p>Nação representa a identidade cultural e social de um grupo.</p>
-    <h3>Povo</h3>
-    <p>Povo constitui os cidadãos de um Estado.</p>
-    <h4>Comunidade</h4>
-    <p>As Comunidades podem transcender fronteiras, conectando indivíduos através de interesses comuns.</p>
-  </head>
-  </html>
+</head>
+<body>
+    <header>
+        <h1>Mapa Mental: Estado, Nação, Povo e Comunidade</h1>
+        <p class="description">Visualização dos conceitos fundamentais de organização social baseado no conteúdo do site ESRI</p>
+    </header>
+    
+    <div class="mind-map-container">
+        <div class="central-topic">
+            <i class="fas fa-brain"></i> Organização Social e Política
+        </div>
+        
+        <div class="branches-container">
+            <div class="branch branch-estado">
+                <div class="main-topic">
+                    <h3><i class="fas fa-landmark"></i> Estado</h3>
+                    <p>Entidade política soberana com território definido</p>
+                </div>
+                <div class="subtopics">
+                    <div class="subtopic">
+                        <p><strong>Soberania:</strong> Autoridade máxima sobre um território</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Território:</strong> Espaço geográfico delimitado</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Governo:</strong> Instituições que exercem o poder</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Leis:</strong> Normas que regulam a sociedade</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Monopólio da força:</strong> Uso legítimo da coerção</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="branch branch-nacao">
+                <div class="main-topic">
+                    <h3><i class="fas fa-flag"></i> Nação</h3>
+                    <p>Comunidade cultural com identidade e história compartilhadas</p>
+                </div>
+                <div class="subtopics">
+                    <div class="subtopic">
+                        <p><strong>Identidade cultural:</strong> Valores, tradições e costumes</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Língua:</strong> Elemento unificador de comunicação</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>História comum:</strong> Narrativas e experiências compartilhadas</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Consciência coletiva:</strong> Sentimento de pertencimento</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Território simbólico:</strong> Espaço de referência identitária</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="branch branch-povo">
+                <div class="main-topic">
+                    <h3><i class="fas fa-users"></i> Povo</h3>
+                    <p>Conjunto de cidadãos que compõem uma sociedade</p>
+                </div>
+                <div class="subtopics">
+                    <div class="subtopic">
+                        <p><strong>Cidadania:</strong> Vínculo jurídico-político com o Estado</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Direitos:</strong> Garantias fundamentais dos indivíduos</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Deveres:</strong> Obrigações para com a coletividade</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Participação política:</strong> Envolvimento nas decisões coletivas</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Diversidade:</strong> Pluralidade de grupos e identidades</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="branch branch-comunidade">
+                <div class="main-topic">
+                    <h3><i class="fas fa-house-user"></i> Comunidade</h3>
+                    <p>Grupos sociais baseados em proximidade e interesses comuns</p>
+                </div>
+                <div class="subtopics">
+                    <div class="subtopic">
+                        <p><strong>Relações face a face:</strong> Interações pessoais diretas</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Solidariedade:</strong> Apoio mútuo e cooperação</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Identidade local:</strong> Sentimento de pertencimento a um lugar</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Organização informal:</strong> Estruturas não institucionalizadas</p>
+                    </div>
+                    <div class="subtopic">
+                        <p><strong>Redes de apoio:</strong> Sistemas de ajuda mútua</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="connectors">
+            <!-- Conectores desenhados via JavaScript -->
+        </div>
+    </div>
+    
+    <footer>
+        <p>Mapa Mental baseado no conteúdo disponível em https://esri.net.br/estado-nacao-povo-e-comunidade/</p>
+        <p>© 2023 - Análise de Conceitos de Organização Social</p>
+    </footer>
+
+    <script>
+        // Desenhar conectores entre o tópico central e os principais ramos
+        document.addEventListener('DOMContentLoaded', function() {
+            const connectorsContainer = document.querySelector('.connectors');
+            const centralTopic = document.querySelector('.central-topic');
+            const branches = document.querySelectorAll('.branch');
+            
+            const centralRect = centralTopic.getBoundingClientRect();
+            const centralX = centralRect.left + centralRect.width / 2;
+            const centralY = centralRect.top + centralRect.height / 2;
+            
+            branches.forEach(branch => {
+                const mainTopic = branch.querySelector('.main-topic');
+                const topicRect = mainTopic.getBoundingClientRect();
+                const topicX = topicRect.left + topicRect.width / 2;
+                const topicY = topicRect.top;
+                
+                // Calcular ângulo e distância
+                const deltaX = topicX - centralX;
+                const deltaY = topicY - centralY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+                
+                // Criar conector
+                const connector = document.createElement('div');
+                connector.className = 'connector';
+                connector.style.width = `${distance}px`;
+                connector.style.left = `${centralX}px`;
+                connector.style.top = `${centralY}px`;
+                connector.style.transform = `rotate(${angle}deg)`;
+                
+                connectorsContainer.appendChild(connector);
+            });
+        });
+    </script>
+</body>
+</html>
