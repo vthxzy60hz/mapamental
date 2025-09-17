@@ -3,70 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa Mental: Estado, Nação, Povo e Comunidade</title>
+    <title>Mapa Mental Interativo: Estado, Nação, Povo e Comunidade</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-dark: #0a0a14;
+            --primary-light: #1a1a2e;
+            --accent-purple: #8a2be2;
+            --accent-blue: #4cc9f0;
+            --accent-pink: #f72585;
+            --accent-yellow: #f9c74f;
+            --accent-deep-purple: #7209b7;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0c0;
+            --card-bg: rgba(26, 26, 46, 0.9);
+            --glow-intensity: 15px;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: #0a0a14;
-            color: #ffffff;
+            background: linear-gradient(135deg, #0a0a14 0%, #161626 50%, #1c1c2e 100%);
+            color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(76, 201, 240, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(247, 37, 133, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(249, 199, 79, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
         }
         
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            background: rgba(10, 10, 20, 0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-out;
         }
         
         h1 {
-            color: #8a2be2;
+            color: var(--accent-purple);
             margin-bottom: 15px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 10px #8a2be2, 0 0 20px #8a2be2;
+            font-size: 2.8rem;
+            text-shadow: 0 0 10px var(--accent-purple), 0 0 20px var(--accent-purple);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #8a2be2 0%, #4cc9f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .description {
-            color: #a0a0c0;
+            color: var(--text-secondary);
             max-width: 800px;
             margin: 0 auto;
             line-height: 1.6;
             font-size: 1.1rem;
         }
         
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(138, 43, 226, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+        }
+        
+        .control-btn:hover {
+            background: rgba(138, 43, 226, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+        
         .mind-map-container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             position: relative;
             padding: 20px;
+            perspective: 1000px;
         }
         
         .central-topic {
             background: linear-gradient(135deg, #4b0082 0%, #8a2be2 100%);
             color: white;
-            padding: 25px 40px;
+            padding: 30px 50px;
             border-radius: 50px;
             font-weight: bold;
-            font-size: 1.8rem;
-            box-shadow: 0 0 15px #8a2be2;
+            font-size: 2rem;
+            box-shadow: 
+                0 0 var(--glow-intensity) var(--accent-purple),
+                0 0 30px rgba(138, 43, 226, 0.5);
             text-align: center;
-            margin: 0 auto 60px;
+            margin: 0 auto 80px;
             width: fit-content;
             position: relative;
             z-index: 10;
             border: 2px solid #9370db;
+            animation: pulse 4s infinite ease-in-out;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        
+        .central-topic:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 calc(var(--glow-intensity) + 5px) var(--accent-purple),
+                0 0 40px rgba(138, 43, 226, 0.7);
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 
+                    0 0 var(--glow-intensity) var(--accent-purple),
+                    0 0 30px rgba(138, 43, 226, 0.5);
+            }
+            50% {
+                transform: scale(1.03);
+                box-shadow: 
+                    0 0 calc(var(--glow-intensity) + 10px) var(--accent-purple),
+                    0 0 40px rgba(138, 43, 226, 0.7);
+            }
         }
         
         .branches-container {
@@ -82,100 +221,207 @@
             min-width: 400px;
             position: relative;
             margin-bottom: 40px;
+            transition: all 0.5s ease;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .branch.collapsed .subtopics {
+            display: none;
+        }
+        
+        .branch.collapsed {
+            min-width: 300px;
+            width: 30%;
         }
         
         .main-topic {
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
             position: relative;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            border-left: 5px solid;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border-left: 6px solid;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+        
+        .main-topic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .main-topic:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        .main-topic:hover::before {
+            opacity: 1;
         }
         
         .main-topic h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .main-topic p {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+        }
+        
+        .toggle-branch {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-branch:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
         }
         
         .subtopics {
-            padding-left: 30px;
+            padding-left: 35px;
             position: relative;
+            display: grid;
+            gap: 15px;
+            transition: all 0.5s ease;
         }
         
         .subtopic {
-            background-color: rgba(20, 20, 35, 0.8);
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 12px;
-            border-left: 3px solid;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s ease;
+            background: var(--card-bg);
+            padding: 18px 20px;
+            border-radius: 15px;
+            border-left: 4px solid;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subtopic::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
         
         .subtopic:hover {
-            transform: translateX(5px);
+            transform: translateX(8px) translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtopic:hover::before {
+            opacity: 1;
         }
         
         .subtopic p {
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
         
         /* Cores para cada ramo */
         .branch-estado .main-topic {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-color: #4cc9f0;
+            border-color: var(--accent-blue);
         }
         
         .branch-estado .main-topic h3 {
-            color: #4cc9f0;
+            color: var(--accent-blue);
         }
         
         .branch-estado .subtopic {
-            border-color: #4cc9f0;
+            border-color: var(--accent-blue);
+        }
+        
+        .branch-estado .main-topic:hover {
+            box-shadow: 0 15px 35px rgba(76, 201, 240, 0.2);
         }
         
         .branch-nacao .main-topic {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-color: #f72585;
+            border-color: var(--accent-pink);
         }
         
         .branch-nacao .main-topic h3 {
-            color: #f72585;
+            color: var(--accent-pink);
         }
         
         .branch-nacao .subtopic {
-            border-color: #f72585;
+            border-color: var(--accent-pink);
+        }
+        
+        .branch-nacao .main-topic:hover {
+            box-shadow: 0 15px 35px rgba(247, 37, 133, 0.2);
         }
         
         .branch-povo .main-topic {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-color: #f9c74f;
+            border-color: var(--accent-yellow);
         }
         
         .branch-povo .main-topic h3 {
-            color: #f9c74f;
+            color: var(--accent-yellow);
         }
         
         .branch-povo .subtopic {
-            border-color: #f9c74f;
+            border-color: var(--accent-yellow);
+        }
+        
+        .branch-povo .main-topic:hover {
+            box-shadow: 0 15px 35px rgba(249, 199, 79, 0.2);
         }
         
         .branch-comunidade .main-topic {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            border-color: #7209b7;
+            border-color: var(--accent-deep-purple);
         }
         
         .branch-comunidade .main-topic h3 {
-            color: #7209b7;
+            color: var(--accent-deep-purple);
         }
         
         .branch-comunidade .subtopic {
-            border-color: #7209b7;
+            border-color: var(--accent-deep-purple);
+        }
+        
+        .branch-comunidade .main-topic:hover {
+            box-shadow: 0 15px 35px rgba(114, 9, 183, 0.2);
         }
         
         .connectors {
@@ -190,53 +436,255 @@
         
         .connector {
             position: absolute;
-            background: linear-gradient(to right, #8a2be2, #4cc9f0, #f72585, #f9c74f, #7209b7);
+            background: linear-gradient(to right, var(--accent-purple), var(--accent-blue), var(--accent-pink), var(--accent-yellow), var(--accent-deep-purple));
             height: 3px;
             transform-origin: 0 0;
             z-index: 1;
+            opacity: 0.7;
+        }
+        
+        .detail-view {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: var(--primary-light);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 700px;
+            z-index: 100;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-view.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .detail-header h2 {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-detail {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-detail:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+        
+        .detail-content {
+            line-height: 1.6;
+        }
+        
+        .detail-content p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
         footer {
-            margin-top: 60px;
+            margin-top: 80px;
             text-align: center;
-            color: #a0a0c0;
+            color: var(--text-secondary);
             font-size: 0.9rem;
-            padding: 20px;
-            border-top: 1px solid #222240;
+            padding: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             width: 100%;
             max-width: 800px;
+            backdrop-filter: blur(5px);
+            border-radius: 20px;
         }
         
-        @media (max-width: 900px) {
+        /* Animações */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 1100px) {
             .branches-container {
-                flex-direction: column;
-                align-items: center;
+                gap: 30px;
             }
             
             .branch {
                 width: 100%;
                 min-width: unset;
+                max-width: 500px;
             }
-            
+        }
+        
+        @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
             
             .central-topic {
-                padding: 20px 30px;
-                font-size: 1.5rem;
+                padding: 20px 35px;
+                font-size: 1.7rem;
+            }
+            
+            .main-topic {
+                padding: 20px;
+            }
+            
+            .main-topic h3 {
+                font-size: 1.4rem;
+            }
+            
+            .subtopics {
+                padding-left: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .central-topic {
+                padding: 15px 25px;
+                font-size: 1.4rem;
+            }
+            
+            .main-topic h3 {
+                font-size: 1.3rem;
+            }
+            
+            .subtopic {
+                padding: 15px;
+            }
+        }
+        
+        /* Modo impressão */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .central-topic {
+                background: #f0f0f0;
+                color: black;
+                box-shadow: none;
+                border: 2px solid #888;
+            }
+            
+            .main-topic {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            
+            .subtopic {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                background: #f9f9f9;
+            }
+            
+            .controls, .toggle-branch, .close-detail {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
+    <div class="particles-container" id="particles"></div>
+    
     <header>
-        <h1>Mapa Mental: Estado, Nação, Povo e Comunidade</h1>
-        <p class="description">Visualização dos conceitos fundamentais de organização social baseado no conteúdo do site ESRI</p>
+        <h1>Mapa Mental Interativo: Estado, Nação, Povo e Comunidade</h1>
+        <p class="description">Explore visualmente os conceitos fundamentais de organização social baseado no conteúdo do site ESRI. Clique nos elementos para obter mais informações.</p>
+        
+        <div class="controls">
+            <button class="control-btn" id="expand-all">
+                <i class="fas fa-expand"></i> Expandir Tudo
+            </button>
+            <button class="control-btn" id="collapse-all">
+                <i class="fas fa-compress"></i> Recolher Tudo
+            </button>
+            <button class="control-btn" id="reset-view">
+                <i class="fas fa-sync"></i> Resetar Visualização
+            </button>
+        </div>
     </header>
     
     <div class="mind-map-container">
-        <div class="central-topic">
+        <div class="central-topic" id="central-topic">
             <i class="fas fa-brain"></i> Organização Social e Política
         </div>
         
@@ -245,21 +693,24 @@
                 <div class="main-topic">
                     <h3><i class="fas fa-landmark"></i> Estado</h3>
                     <p>Entidade política soberana com território definido</p>
+                    <button class="toggle-branch">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
                 <div class="subtopics">
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A soberania estatal é o princípio fundamental que garante a autoridade exclusiva do Estado sobre seu território e população, sem interferência externa. É a base do direito internacional moderno.">
                         <p><strong>Soberania:</strong> Autoridade máxima sobre um território</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="O território é o elemento físico do Estado, incluindo solo, subsolo, espaço aéreo e águas territoriais. Sua delimitação é essencial para o exercício da soberania.">
                         <p><strong>Território:</strong> Espaço geográfico delimitado</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="O governo é o conjunto de instituições e pessoas que exercem funções executivas, legislativas e judiciárias para administrar o Estado e fazer cumprir as leis.">
                         <p><strong>Governo:</strong> Instituições que exercem o poder</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="As leis são normas jurídicas criadas pelo Estado que regulam o comportamento dos indivíduos e instituições dentro de seu território, garantindo ordem e justiça social.">
                         <p><strong>Leis:</strong> Normas que regulam a sociedade</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="O monopólio da força legítima é a capacidade exclusiva do Estado de usar a coerção física para fazer cumprir as leis, mantendo a ordem e a segurança pública.">
                         <p><strong>Monopólio da força:</strong> Uso legítimo da coerção</p>
                     </div>
                 </div>
@@ -269,21 +720,24 @@
                 <div class="main-topic">
                     <h3><i class="fas fa-flag"></i> Nação</h3>
                     <p>Comunidade cultural com identidade e história compartilhadas</p>
+                    <button class="toggle-branch">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
                 <div class="subtopics">
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A identidade cultural nacional é construída através de valores, tradições, costumes e símbolos compartilhados que diferenciam um grupo humano dos demais.">
                         <p><strong>Identidade cultural:</strong> Valores, tradições e costumes</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A língua é um dos elementos mais importantes de coesão nacional, permitindo a comunicação e transmitindo a cultura e valores de um povo através das gerações.">
                         <p><strong>Língua:</strong> Elemento unificador de comunicação</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A história comum fornece a narrativa coletiva que une os membros de uma nação, com eventos, heróis e memórias compartilhadas que fortalecem o sentimento de pertencimento.">
                         <p><strong>História comum:</strong> Narrativas e experiências compartilhadas</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A consciência coletiva nacional é o sentimento de identidade partilhada que permite aos indivíduos se reconhecerem como parte de uma mesma comunidade imaginada.">
                         <p><strong>Consciência coletiva:</strong> Sentimento de pertencimento</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="O território simbólico não se limita às fronteiras físicas, mas inclui os lugares de memória, paisagens emblemáticas e espaços carregados de significado identitário para a nação.">
                         <p><strong>Território simbólico:</strong> Espaço de referência identitária</p>
                     </div>
                 </div>
@@ -293,21 +747,24 @@
                 <div class="main-topic">
                     <h3><i class="fas fa-users"></i> Povo</h3>
                     <p>Conjunto de cidadãos que compõem uma sociedade</p>
+                    <button class="toggle-branch">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
                 <div class="subtopics">
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A cidadania estabelece o vínculo jurídico-político entre o indivíduo e o Estado, conferindo direitos e deveres recíprocos e permitindo a participação na vida política.">
                         <p><strong>Cidadania:</strong> Vínculo jurídico-político com o Estado</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="Os direitos fundamentais são garantias instituídas para proteger a dignidade humana, incluindo direitos civis, políticos, sociais, econômicos e culturais.">
                         <p><strong>Direitos:</strong> Garantias fundamentais dos indivíduos</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="Os deveres cívicos são obrigações dos cidadãos para com a coletividade, incluindo o respeito às leis, pagamento de impostos e defesa do país quando necessário.">
                         <p><strong>Deveres:</strong> Obrigações para com a coletividade</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A participação política permite aos cidadãos influenciar as decisões coletivas através do voto, plebiscitos, referendos, manifestações e envolvimento em partidos ou movimentos sociais.">
                         <p><strong>Participação política:</strong> Envolvimento nas decisões coletivas</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A diversidade caracteriza as sociedades contemporâneas, compostas por múltiplos grupos étnicos, religiosos, culturais e sociais que coexistem dentro de um mesmo Estado.">
                         <p><strong>Diversidade:</strong> Pluralidade de grupos e identidades</p>
                     </div>
                 </div>
@@ -317,21 +774,24 @@
                 <div class="main-topic">
                     <h3><i class="fas fa-house-user"></i> Comunidade</h3>
                     <p>Grupos sociais baseados em proximidade e interesses comuns</p>
+                    <button class="toggle-branch">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
                 </div>
                 <div class="subtopics">
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="As relações face a face são interações pessoais diretas que caracterizam comunidades menores, permitindo maior intimidade, confiança e controle social informal.">
                         <p><strong>Relações face a face:</strong> Interações pessoais diretas</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A solidariedade comunitária baseia-se no apoio mútuo e na cooperação entre membros, criando redes de assistência e compartilhamento que fortalecem os laços sociais.">
                         <p><strong>Solidariedade:</strong> Apoio mútuo e cooperação</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A identidade local emerge do sentimento de pertencimento a um lugar específico, com suas características físicas, históricas e culturais particulares.">
                         <p><strong>Identidade local:</strong> Sentimento de pertencimento a um lugar</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="A organização informal comunitária surge espontaneamente a partir das necessidades locais, sem dependência de estruturas institucionais formais.">
                         <p><strong>Organização informal:</strong> Estruturas não institucionalizadas</p>
                     </div>
-                    <div class="subtopic">
+                    <div class="subtopic" data-detail="As redes de apoio comunitárias são sistemas de ajuda mútua que fornecem assistência material, emocional e social aos membros em situações de necessidade.">
                         <p><strong>Redes de apoio:</strong> Sistemas de ajuda mútua</p>
                     </div>
                 </div>
@@ -339,30 +799,75 @@
         </div>
         
         <div class="connectors">
+            <!-- Conectores desenhados via JavaScript -->
         </div>
     </div>
     
+    <div class="detail-view" id="detail-view">
+        <div class="detail-header">
+            <h2 id="detail-title"><i class="fas fa-info-circle"></i> Detalhes</h2>
+            <button class="close-detail" id="close-detail">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="detail-content">
+            <p id="detail-text">Selecione um elemento para ver detalhes.</p>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+    
     <footer>
         <p>Mapa Mental baseado no conteúdo disponível em https://esri.net.br/estado-nacao-povo-e-comunidade/</p>
-        <p>Mapa mental feito e desenvolvido por Vítor Hugo dos Reis.</p>
+        <p>Mapa mental interativo desenvolvido por Vítor Hugo dos Reis.</p>
     </footer>
 
     <script>
+        // Criar partículas de fundo
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Tamanho aleatório
+                const size = Math.random() * 5 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Posição inicial aleatória
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // Atraso aleatório na animação
+                const delay = Math.random() * 15;
+                particle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
         // Desenhar conectores entre o tópico central e os principais ramos
-        document.addEventListener('DOMContentLoaded', function() {
+        function drawConnectors() {
             const connectorsContainer = document.querySelector('.connectors');
+            connectorsContainer.innerHTML = '';
+            
             const centralTopic = document.querySelector('.central-topic');
             const branches = document.querySelectorAll('.branch');
             
             const centralRect = centralTopic.getBoundingClientRect();
             const centralX = centralRect.left + centralRect.width / 2;
-            const centralY = centralRect.top + centralRect.height / 2;
+            const centralY = centralRect.top + centralRect.height;
             
             branches.forEach(branch => {
                 const mainTopic = branch.querySelector('.main-topic');
                 const topicRect = mainTopic.getBoundingClientRect();
-                const topicX = topicRect.left + topicRect.width / 2;
-                const topicY = topicRect.top;
+                const topicX = topicRect.left;
+                const topicY = topicRect.top + topicRect.height / 2;
                 
                 // Calcular ângulo e distância
                 const deltaX = topicX - centralX;
@@ -380,6 +885,141 @@
                 
                 connectorsContainer.appendChild(connector);
             });
+        }
+        
+        // Alternar expansão/recolhimento dos ramos
+        function setupBranchToggle() {
+            const toggleButtons = document.querySelectorAll('.toggle-branch');
+            
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const branch = this.closest('.branch');
+                    branch.classList.toggle('collapsed');
+                    
+                    const icon = this.querySelector('i');
+                    if (branch.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-right';
+                    } else {
+                        icon.className = 'fas fa-chevron-down';
+                    }
+                    
+                    // Redesenhar conectores após recolher/expandir
+                    setTimeout(drawConnectors, 300);
+                });
+            });
+        }
+        
+        // Expandir todos os ramos
+        function expandAll() {
+            const branches = document.querySelectorAll('.branch');
+            const toggleIcons = document.querySelectorAll('.toggle-branch i');
+            
+            branches.forEach(branch => {
+                branch.classList.remove('collapsed');
+            });
+            
+            toggleIcons.forEach(icon => {
+                icon.className = 'fas fa-chevron-down';
+            });
+            
+            setTimeout(drawConnectors, 300);
+        }
+        
+        // Recolher todos os ramos
+        function collapseAll() {
+            const branches = document.querySelectorAll('.branch');
+            const toggleIcons = document.querySelectorAll('.toggle-branch i');
+            
+            branches.forEach(branch => {
+                branch.classList.add('collapsed');
+            });
+            
+            toggleIcons.forEach(icon => {
+                icon.className = 'fas fa-chevron-right';
+            });
+            
+            setTimeout(drawConnectors, 300);
+        }
+        
+        // Mostrar detalhes ao clicar em um subtópico
+        function setupDetailView() {
+            const detailView = document.getElementById('detail-view');
+            const overlay = document.getElementById('overlay');
+            const closeBtn = document.getElementById('close-detail');
+            const detailTitle = document.getElementById('detail-title');
+            const detailText = document.getElementById('detail-text');
+            const subtopics = document.querySelectorAll('.subtopic');
+            const mainTopics = document.querySelectorAll('.main-topic');
+            const centralTopic = document.getElementById('central-topic');
+            
+            function openDetail(title, content) {
+                detailTitle.innerHTML = `<i class="fas fa-info-circle"></i> ${title}`;
+                detailText.textContent = content;
+                detailView.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeDetail() {
+                detailView.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            // Adicionar eventos aos subtópicos
+            subtopics.forEach(subtopic => {
+                subtopic.addEventListener('click', function() {
+                    const title = this.querySelector('strong').textContent;
+                    const content = this.getAttribute('data-detail');
+                    openDetail(title, content);
+                });
+            });
+            
+            // Adicionar eventos aos tópicos principais
+            mainTopics.forEach(topic => {
+                topic.addEventListener('click', function() {
+                    const title = this.querySelector('h3').textContent;
+                    const content = this.querySelector('p').textContent;
+                    openDetail(title, content);
+                });
+            });
+            
+            // Adicionar evento ao tópico central
+            centralTopic.addEventListener('click', function() {
+                openDetail('Organização Social e Política', 
+                    'A organização social e política refere-se às estruturas e instituições que as sociedades humanas desenvolvem para governar themselves, distribuir recursos e manter a ordem. Engloba conceitos como Estado, nação, povo e comunidade, que se inter-relacionam de formas complexas para formar o tecido da vida coletiva.');
+            });
+            
+            // Fechar ao clicar no botão de fechar ou no overlay
+            closeBtn.addEventListener('click', closeDetail);
+            overlay.addEventListener('click', closeDetail);
+            
+            // Fechar com a tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeDetail();
+                }
+            });
+        }
+        
+        // Inicializar tudo quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            drawConnectors();
+            setupBranchToggle();
+            setupDetailView();
+            
+            // Adicionar eventos aos botões de controle
+            document.getElementById('expand-all').addEventListener('click', expandAll);
+            document.getElementById('collapse-all').addEventListener('click', collapseAll);
+            document.getElementById('reset-view').addEventListener('click', function() {
+                collapseAll();
+                setTimeout(expandAll, 300);
+            });
+            
+            // Redesenhar conectores quando a janela for redimensionada
+            window.addEventListener('resize', drawConnectors);
         });
     </script>
 </body>
